@@ -24,4 +24,4 @@ require (
 
 replace github.com/niryb/microservices-proto/golang/order => ../../microservices-proto/golang/order
 
-replace github.com/niryb/microservices-proto/golang/payment => ../../../microservices-proto/microservices-proto/golang/payment
+replace github.com/niryb/microservices-proto/golang/payment => ../../microservices-proto/golang/payment
