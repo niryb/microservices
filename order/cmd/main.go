@@ -12,6 +12,7 @@ import (
 
 func main() {
 	dbAdapter, err := db.NewAdapter(config.GetDataSourceURL())
+	log.Println("Order service starting...")
 	if err != nil {
 		log.Fatalf("Failed to connect to database. Error: %v", err)
 	}

@@ -32,3 +32,12 @@ func (o *Order) TotalPrice() float32 {
 	}
 	return totalPrice
 }
+
+// TotalQuantity calcula a quantidade total de itens no pedido
+func (o *Order) TotalQuantity() int32 {
+	var totalQty int32
+	for _, item := range o.OrderItems {
+		totalQty += item.Quantity
+	}
+	return totalQty
+}

@@ -43,7 +43,7 @@ spec:
           - name: ENV
             value: "prod"
           - name: DATA_SOURCE_URL
-            value : "root:s3cr3t@tcp(mysql:3306)/payments?charset=utf8mb4&parseTime=True&loc=Local"
+            value : "root:s3cr3t@tcp(mysql:3307)/payments?charset=utf8mb4&parseTime=True&loc=Local"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
