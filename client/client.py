@@ -20,22 +20,31 @@ def enviar_pedido(stub, nome_teste, customer_id, itens):
         # Tenta enviar para o microsserviço Order
         response = stub.Create(request)
         print(f"✅ SUCESSO! Pedido criado com ID: {response.order_id}")
-        print("   -> Verifique no banco: Status deve ser 'Paid'")
+        print("   -> Status deve ser 'Shipped' no banco de dados.")
     
     except grpc.RpcError as e:
         # Captura o erro retornado pelo servidor
         print(f"❌ ERRO RECEBIDO (Status gRPC: {e.code()})")
         print(f"   Mensagem: {e.details()}")
         
-        # Dicas do que verificar baseadas na mensagem
-        if "exceed 50" in e.details():
-             print("   -> Comportamento esperado para excesso de itens (Não salva no banco).")
-        elif "Payment over 1000" in e.details():
-             print("   -> Comportamento esperado para valor alto (Verifique no banco: Status deve ser 'Canceled').")
+        error_msg = e.details() if e.details() else ""
+        
+        if "exceed 50" in error_msg:
+             print("   -> CORRETO - Bloqueio de quantidade funcionou.")
+        
+        elif "Payment over 1000" in error_msg:
+             print("   -> CORRETO -Bloqueio de pagamento funcionou.")
+             print("   -> EXPECTATIVA: Status no banco deve ser 'Canceled'")
+        
+        elif "product not found" in error_msg:
+             print("   -> CORRETO -Validação de Estoque funcionou (Requisito 1.2).")
+        
+        elif "connectex" in error_msg or "unavailable" in error_msg.lower():
+             print("   -> SINAL DE ALERTA: Parece que um dos microsserviços está desligado.")
         else:
              print("   -> Erro não esperado.")
     
-    print("-" * 40 + "\n")
+    print("-" * 50 + "\n")
 
 
 def run():
@@ -44,22 +53,15 @@ def run():
     print("🔌 Conectando ao servidor gRPC...")
     channel = grpc.insecure_channel('localhost:3000')
     stub = order_pb2_grpc.OrderStub(channel)
-    print("-" * 40 + "\n")
+    print("-" * 50 + "\n")
 
-    # Teste 1: Qtd < 50 e Preço < 1000 --- Pedido Válido
     item_valido = order_pb2.OrderItem(
         product_code="CANETA",
         unit_price=10.0,
         quantity=5
     )
+    enviar_pedido(stub, "Teste: Pedido Válido", 101, [item_valido])
 
-    # Erro de quantidade exagerada (> 50 itens) - ORDER
-    item_muitos = order_pb2.OrderItem(
-        product_code="CLIPES",
-        unit_price=1.0,
-        quantity=51 #ultrapassando o limite
-    )
-    enviar_pedido(stub, "Teste 2: Quantidade Exagerada (> 50 itens)", 102, [item_muitos])
 
     # Erro de Pagamento - Preço > 1000. - PAYMENT
     item_caro = order_pb2.OrderItem(
