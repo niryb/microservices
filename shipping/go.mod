@@ -1,13 +1,12 @@
-module github.com/l-e-t-i-c-i-a/microservices/shipping
+module github.com/niryb/microservices/shipping
 
 go 1.24.0
 
-replace github.com/l-e-t-i-c-i-a/microservices-proto/golang/shipping => ../../microservices-proto/golang/shipping
+replace github.com/niryb/microservices-proto/golang/shipping => ../../microservices-proto/golang/shipping
 
-//github.com/l-e-t-i-c-i-a/microservices-proto/golang/shipping v0.0.0-00010101000000-000000000000
 require google.golang.org/grpc v1.78.0
 
-require github.com/l-e-t-i-c-i-a/microservices-proto/golang/shipping v0.0.0-20260126115315-ddf2abd81ac5
+require github.com/niryb/microservices-proto/golang/shipping v0.0.0-20260126115315-ddf2abd81ac5
 
 require (
 	golang.org/x/net v0.49.0 // indirect

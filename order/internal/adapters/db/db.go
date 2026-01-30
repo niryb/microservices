@@ -23,6 +23,12 @@ type OrderItem struct {
 	OrderID     uint
 }
 
+type Product struct {
+	gorm.Model
+	Code string `gorm:"uniqueIndex;size:255"`
+	Name string
+}
+
 type Adapter struct {
 	db *gorm.DB
 }
@@ -32,7 +38,7 @@ func NewAdapter(dataSourceUrl string) (*Adapter, error) {
 	if openErr != nil {
 		return nil, fmt.Errorf("db connection error: %v", openErr)
 	}
-	err := db.AutoMigrate(&Order{}, OrderItem{})
+	err := db.AutoMigrate(&Order{}, OrderItem{}, &Product{})
 	if err != nil {
 		return nil, fmt.Errorf("db migration error: %v", err)
 	}

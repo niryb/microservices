@@ -41,7 +41,7 @@ func (a Adapter) Run() {
 }
 
 func (a Adapter) Create(ctx context.Context, request *shipping.CreateShippingRequest) (*shipping.CreateShippingResponse, error) {
-	log.Printf("🚢 SHIPPING: Recebido pedido de envio para Order ID: %d", request.OrderId)
+	log.Printf("SHIPPING: Recebido pedido de envio para Order ID: %d", request.OrderId)
 
 	var items []domain.ShippingItem
 	for _, i := range request.Items {
@@ -51,14 +51,14 @@ func (a Adapter) Create(ctx context.Context, request *shipping.CreateShippingReq
 	newShipping := domain.NewShipping(request.OrderId, items)
 	result, err := a.api.CreateShipping(newShipping)
 	if err != nil {
-		log.Printf("❌ SHIPPING: Erro ao criar envio: %v", err)
+		log.Printf("SHIPPING: Erro ao criar envio: %v", err)
 		return nil, err
 	}
 
 	log.Printf("✅ SHIPPING: Envio processado. Prazo calculado: %d dias", result.DeliveryDays)
 
 	return &shipping.CreateShippingResponse{
-		ShippingId:   123, // Fake
+		ShippingId:   123,
 		DeliveryDays: result.DeliveryDays,
 	}, nil
 }
